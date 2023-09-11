@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `schedule` Go package provides a simple yet flexible way to manage an in-memory event schedule. It allows you to schedule both one-off and recurrent events with ease. The core functionality is encapsulated in the `Event` struct, which can be embedded into any other structure you're trying to schedule.
+The `schedule` Go module provides a simple yet flexible way to manage an in-memory event schedule. It allows you to schedule both one-off and recurrent events with ease. The core functionality is encapsulated in the `Event` struct, which can be embedded into any other structure you're trying to schedule.
 
 **No Third-Party Dependencies**: This package is standalone and doesn't require any third-party libraries.
 
@@ -22,11 +22,33 @@ import "github.com/edsonmedina/schedule"
 
 ### Create an Event
 
+#### Single Day Event
+
 ```go
-event := schedule.Event{
-    Date: time.Now(),
+singleDayEvent := schedule.Event{
+    Date: time.Date(2023, 9, 5, 0, 0, 0, 0, time.UTC),
+}
+```
+
+#### Recurring Daily Event
+
+```go
+dailyEvent := schedule.Event{
     Frequency: schedule.Daily,
-    // ... other fields
+    StartDate: time.Date(2023, 9, 1, 0, 0, 0, 0, time.UTC),
+    EndDate:   time.Date(2023, 9, 30, 0, 0, 0, 0, time.UTC),
+}
+```
+
+#### Recurring Weekly Event
+
+```go
+weeklyEvent := schedule.Event{
+    Frequency: schedule.Weekly,
+    WeekdayRule: schedule.WeekdayRule{
+        Day:   time.Wednesday,
+        Occur: schedule.Every,
+    },
 }
 ```
 
@@ -35,7 +57,9 @@ event := schedule.Event{
 ```go
 calendar := schedule.Calendar{
     Events: []schedule.Event{
-        event,
+        singleDayEvent,
+        dailyEvent,
+        weeklyEvent,
         // ... other events
     },
 }
@@ -60,13 +84,13 @@ events := calendar.ListEventsBetween(start, end)
 
 ### Event Struct
 
-- `Date`: The date of the event.
+- `Date`: The date of the event. Use this field only for one-time events.
 - `Frequency`: The frequency of the event (Daily, Weekly, Monthly, Yearly, Weekdays, Weekends).
 - `DayOfMonth`: The day of the month the event occurs (e.g., 5 for the 5th day).
 - `WeekdayRule`: Complex rules for weekday events (e.g., last Friday of each month).
 - `Month`: The month the event occurs (e.g., 11 for November).
-- `StartDate`: Start date for recurrent events.
-- `EndDate`: End date for recurrent events.
+- `StartDate`: Start date for recurrent events. This field is mandatory for recurring events.
+- `EndDate`: End date for recurrent events. This field is mandatory for recurring events.
 
 ### Calendar Struct
 
