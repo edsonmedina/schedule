@@ -1,4 +1,4 @@
-# Go In-Memory Event Scheduler
+# Go In-Memory Event Schedule
 
 ## Overview
 
@@ -22,10 +22,10 @@ import "github.com/edsonmedina/schedule"
 
 ### Create an Event
 
-#### Single Day Event
+#### One-Time Event
 
 ```go
-singleDayEvent := schedule.Event{
+oneTimeEvent := schedule.Event{
     Date: time.Date(2023, 9, 5, 0, 0, 0, 0, time.UTC),
 }
 ```
@@ -49,6 +49,8 @@ weeklyEvent := schedule.Event{
         Day:   time.Wednesday,
         Occur: schedule.Every,
     },
+    StartDate: time.Date(2023, 9, 1, 0, 0, 0, 0, time.UTC),
+    EndDate:   time.Date(2023, 9, 30, 0, 0, 0, 0, time.UTC),
 }
 ```
 
@@ -57,7 +59,7 @@ weeklyEvent := schedule.Event{
 ```go
 calendar := schedule.Calendar{
     Events: []schedule.Event{
-        singleDayEvent,
+        oneTimeEvent,
         dailyEvent,
         weeklyEvent,
         // ... other events
